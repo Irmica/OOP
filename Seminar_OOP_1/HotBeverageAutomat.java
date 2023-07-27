@@ -4,6 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HotBeverageAutomat extends Automat {
+    public HotBeverageAutomat(Storage catergoryList) {
+        super(catergoryList);
+        //TODO Auto-generated constructor stub
+    }
+
+
     List<HotBeverage> listProduct = new ArrayList<>();
 
     public void initHotBeverage(List<HotBeverage> myList2) {

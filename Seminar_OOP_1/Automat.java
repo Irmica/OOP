@@ -1,27 +1,52 @@
-// Реализуйте класс Товар, содержащий данные о товаре, и ТорговыйАвтомат,
-// содержащий в себе методы initProducts (List <Product>) сохраняющий в себе список исходных продуктов и getProduct(String name)
 
 package Seminar_OOP_1;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Automat {
+  private Storage categoryList;
 
-  List<Product> listProduct = new ArrayList<>();
 
-  public void initProduct(List<Product> myList) {
-    listProduct = myList;
+  public Automat(Storage catergoryList) {
+    this.categoryList = catergoryList;
   }
 
-  public Product getProduct(String name) {
-    for (Product el : listProduct) {
-      if (el.getName().equals(name)) {
-        return el;
+  void createOrder(Human person) {
+    if ((total(person.getShoppingList()) <= person.getMoney())
+        && checkAvailabilityShoppingList(person.getShoppingList())) {
+      Order newOrder = new Order(person.getShoppingList(), person.getName(), categoryList);
+      System.out.println(newOrder.orderReceipt());
+    }
+    else{
+      System.out.println("Не выполнены условия покупки!");
+    }
+  }
+
+  double total(HashMap<String, Integer> shoppingList) {
+    double total = 0;
+    for (Map.Entry<String, Integer> name : shoppingList.entrySet()) {
+      String tmpName = name.getKey();
+      int tmpQuantity = name.getValue();
+      total += tmpQuantity * categoryList.getPriceProduct(tmpName);
+    }
+    return total;
+  }
+
+  boolean checkAvailability(String name, int quantity) {
+    return categoryList.getQuantityProduct(name) >= quantity;
+  }
+
+  boolean checkAvailabilityShoppingList(HashMap<String, Integer> shoppingList) {
+    boolean verification = true;
+    for (Map.Entry<String, Integer> name : shoppingList.entrySet()) {
+      String tmpName = name.getKey();
+      int tmpQuantity = name.getValue();
+      if (!checkAvailability(tmpName, tmpQuantity)) {
+        verification = false;
+        break;
       }
     }
-    return null;
-
+    return verification;
   }
-
 }
